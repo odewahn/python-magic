@@ -1,0 +1,80 @@
+[
+  {
+    "time": [0,5],
+    "text": "Version control and source code management",
+    "sel": "#revisioncontrolandinfrastructuremanagement",
+    "scroll": true
+  },
+  {
+    "time": [0,10],
+    "text": "Our First Foray into the World of Git",
+    "sel": "#ourfirstforayintotheworldofgit",
+    "scroll": true
+  },
+  {
+    "time": [1,35],
+    "text": "Create a New Direcory",
+    "sel": "#makeDirectory",
+    "scroll": true
+  },
+  {
+    "time": [1,48],
+    "text": "Configure git",
+    "sel": "#configureGit",
+    "scroll": true
+  },
+  {
+    "time": [2,15],
+    "text": "Run git init",
+    "sel": "#initGit",
+    "scroll": true
+  },
+  {
+    "time": [2,53],
+    "text": "test.py",
+    "sel": "#createHelloGitPy",
+    "scroll": true
+  },
+  {
+    "time": [3,18],
+    "text": "Add test.py to git",
+    "sel": "#addTestPy",
+    "scroll": true
+  },
+  {
+    "time": [3,29],
+    "text": "Check status",
+    "sel": "#checkStatus",
+    "scroll": true
+  },
+  {
+    "time": [3,49],
+    "text": "Commit test.py",
+    "sel": "#firstCommit",
+    "scroll": true
+  },
+  {
+    "time": [4,20],
+    "text": "Update test.py",
+    "sel": "#helloWorldPy",
+    "scroll": true
+  },
+  {
+    "time": [4,40],
+    "text": "Git Diff",
+    "sel": "#gitDiff",
+    "scroll": true
+  },
+  {
+    "time": [5,9],
+    "text": "Commit new change",
+    "sel": "#secondCommit",
+    "scroll": true
+  },
+  {
+    "time": [5,20],
+    "text": "Run git log",
+    "sel": "#gitLog",
+    "scroll": true
+  }
+]
