@@ -1,228 +1,583 @@
 
-# Version Control and Source Code Management
+# Amplifying the Impact of Your Code
 
-Version control is how you can ensure that you can recall older versions of a file when you need them. A version control system records changes to one or more files and lets you easily recall any older version you want.
+<span id="introduction"/>
 
-In the previous chapter, you learned about the concept of Infrastructure as Code. A Version Control system can act as the foundation for Infrastructure as Code. Everything you do in your infrastructure, you can capture it in scripts, configuration files and definition files and check them into a VC such as Git.
+If you'd love to see more people using your code.... to magnify the impact of the code you already write... it makes sense to study successful open source libraries. They become successful and popular because, first and foremost, they let people do things they care about: build software and solve problems which are important to them. But just solving an important problem isn't enough. The library also has to be *usable*. It needs to be easy for developers to adopt, to learn, to integrate in their existing application. These days, we all have too much to learn already; in picking between two libraries, we're going to naturally tend towards the one that will make it easiest for us to hit the ground running... and that's only natural.
 
-In this chapter, I explain the essentials of Git, which is the most popular version control system today.
+Let's study a wildly successful example: the excellent Pandas data analysis library. This library does an amazing and remarkable amount of magic under the hood, and we're not going to study any of that here. Rather, we're going to focus on the magic on the surface: the interface this library exposes. It's core abstraction is something called a **dataframe**:
 
-## Revision Control and Infrastructure Management
-One might wonder how revision control, which has traditionally been used for source code management, helps with infrastructure management. System administrators can use revision control in exactly the same way as developers do!
-
-For example, you can use Git for storing the BIND configuration you use in your environment. Similarly, you can store the configuration details for software such as Postfix, iptables, Hadoop and Mysql, etc in revision control.
-
-NOTE: Configuration management tools such as Puppet and Chef integrate well with Git
-
-You can change all your infrastructure related scripts and configuration files in a VCS. When a system administrator wants to make changes, he/she checks the necessary files out of the VCS, makes their changes, and commits them back into the VCS.
-
-These committed changes are then available for application to the infrastructure. If you’re using a change management pipeline (see Chapter 11), the changes are automatically applied to and tested in a test environment. If different members of the admin team are making incompatible configuration changes, the VCS will force you to reconcile the differences by showing up the changes as being in conflict with each other.
-
-In this context, it’s interesting to know that a lot of open source software projects such as the Linux kernel, OpenStack, and Yum, store their source code in Git.
-
-## Our First Foray into the World of Git
-In this section, I get your feet wet, by providing a whirlwind tour through basic Git operations. This way, you get a good flavor of Git commands and Git operations and what they do. I’ll follow this section up with a brief explanation of Git’s fundamental features: branching, committing, and cloning.
-
-Before we start, let's switch over to a new working direcory:
-
-<span id="makeDirectory"/>
+<span id="dataframeExample"/>
 
 
-```bash
-cd /tmp
-mkdir git-test
-cd git-test
+```python
+import pandas
+df = pandas.DataFrame({
+        'A': [-137, 22, -3, 4, 5],
+        'B': [10, 11, 121, 13, 14],
+        'C': [3, 6, 91, 12, 15],
+    })
 ```
 
-    
-
-We'll also need to provide some configuration information to (among other thing) identify ourselves in the commit history as we make changes:
-
-<span id="configureGit"/>
+Here, we've created an object called `df`, which has three columns of data, labed `A`, `B`, and `C`. The dictionary passed in maps each column name to a list of column data. So in your mind, you rotate each horizontal list into a vertical column - got it? Then the data is organized like this:
 
 
-```bash
-git config --global user.email "odewahn@oreilly.com"
-git config --global user.name "Andrew Odewahn"
+```python
+df
 ```
 
-    
-
-From this directory, create a local git repository with the git init command:
-
-<span id="initGit"/>
 
 
-```bash
-git init
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-137</td>
+      <td>10</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>22</td>
+      <td>11</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-3</td>
+      <td>121</td>
+      <td>91</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>13</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>14</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+The far left is an index, and the columns of data are headed by their names. Now, Pandas lets you do some interesting things like select a certain subset of the data, according to a criteria. For example:
+
+<span id="selectSubset"/>
+
+
+```python
+positive_a = df[df.A > 0]
+positive_a
 ```
 
-    Initialized empty Git repository in /tmp/git-test/.git/
 
 
-Let’s create a simple Python file named test.py with the following content:
 
-<span id="createHelloGitPy"/>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>22</td>
+      <td>11</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>13</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>14</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
-```bash
-echo "print('Hello Git')" > test.py
+
+See what's happening: the expression `df.A > 0` tells Pandas: "Give me a new DataFrame, consisting only of those rows of `df` whose value in the `A` column is positive."  We can do more sophisticated expressions too:
+
+<span id="createNewDataFrame"/>
+
+
+```python
+# Bigger B column values
+big_b = df[df.B >= 14]
+big_b
 ```
 
-    
-
-Just to make sure it worked, let's run it and confirm we get what we expect:
 
 
-```bash
-python test.py
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <td>-3</td>
+      <td>121</td>
+      <td>91</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>14</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+# Or even express relationships between different columns:
+coupled = df[df.A + df.B < 20]
+coupled
 ```
 
-    Hello Git
 
 
-Let’s add this new Python file to the git repository I initialized earlier.
 
-<span id="addTestPy"/>
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>A</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-137</td>
+      <td>10</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>13</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>14</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
-```bash
-git add test.py
+
+In an expression like `df[df.A > 0]`, the part in the brackets becomes a filter; you get a new `DataFrame` with only the matching rows.
+
+But when you think about it, **that's a little weird**. Boolean expressions are supposed to evaluate to either True or False. That means everything I typed above should become either `df[True]` or `df[False]` at runtime... encoding no information about the rows you actually want.
+
+**So what's going on? How in the world does this work?**
+
+# Magic Methods
+
+Let's explore all this by building our own data-processing library, called `fakepandas`. We won't implement any of the real work Pandas does under the hood, so you'll always want to use Pandas for any actual data-processing work. Instead, we'll focus on the surface magic... how Pandas provides its interface. Our goal is to reinvent that with `fakepandas`, and learn a lot in the process, so we can this Python magic in our own libraries.
+
+And in fact, it turns out this magic relies on a a feature of Python called **magic methods**.
+
+TODO: Write more narration, etc. below. About 97% of the code I'll use in the oriole is below, I just need to write more exposition, etc.
+
+
+```python
+def num_rows(d):
+    '''
+    Get number of data rows.
+
+    Raise ValueError if not all columns have the same number of rows.
+    '''
+    if len(d) == 0:
+        return 0
+    def gen_columns():
+        for v in d.values():
+            yield v
+    columns = gen_columns()
+    length = len(next(columns))
+    for index, column in enumerate(columns, 1):
+        if len(column) != length:
+            raise ValueError(index)
+    return length
 ```
 
-    
 
-Check the status of your new repository with the git status command:
+```python
+# The operator module does not provide functions for the logical "and"
+# and "or" operators, only the bitwise "&" and "|". So we make our own
+# functions for the logicals.
+def logical_and(a, b):
+    return a and b
 
-<span id="checkStatus"/>
+def logical_or(a, b):
+    return a or b
 
+class GeneralComparison:
+    '''
+    A generic representation of a comparison.
 
-```bash
-git status
+    Used when comparing two columns to each other (i.e., two LabelReferences).
+    '''
+    def __init__(self, lookup, value, operate):
+        self.lookup = lookup
+        self.value = value
+        self.operate = operate
+    def apply(self, data, row_number):
+        other_value = self.lookup(data, row_number)
+        return self.operate(other_value, self.value)
+    # __and__ is actually bitwise and ("a & b"), not logical and ("a
+    # and b").  Unfortunately, no current version of Python provides a
+    # magic method for logical and.  Thus, we have little choice but
+    # to fake it using bitwise and.
+    def __and__(self, other):
+        return Conjunction(self, other, logical_and)
+    # The situation with __or__ is exactly analogous.
+    def __or__(self, other):
+        return Conjunction(self, other, logical_or)
 ```
 
-    On branch master
-    
-    Initial commit
-    
-    Changes to be committed:
-      (use "git rm --cached <file>..." to unstage)
-    
-    	new file:   test.py
-    
 
+```python
+class Comparison(GeneralComparison):
+    '''
+    Simplified form of comparison.
 
-The output of the git status command reveals that there are “changes to be committed”. Our new file test.py is sure part of the local repository but not yet committed. Why don’t we commit the changes and see what happens?
-
-<span id="firstCommit"/>
-
-
-```bash
-git commit -m "simple print program"
+    Used when comparing a column (LabelReference) to a constant value.
+    '''
+    def __init__(self, label: str, value, operate):
+        def lookup(data, row_number):
+            return data[label][row_number]
+        super().__init__(lookup, value, operate)
 ```
 
-    [master (root-commit) 7661e7a] simple print program
-     1 file changed, 1 insertion(+)
-     create mode 100644 test.py
+
+```python
+class Conjunction:
+    '''
+    Represents a logical "and" or "or" relationship between two expressions.
+
+    combine will generally be set to either logical_and or logical_or.
+    '''
+    def __init__(self, left: GeneralComparison, right: GeneralComparison, combine: 'func'):
+        self.left = left
+        self.right = right
+        self.combine = combine
+    def apply(self, data: dict, row_number: int):
+        return self.combine(self.left.apply(data, row_number), self.right.apply(data, row_number))
 
 
-Check the current status of the git local repository.
-
-
-```bash
-git status
 ```
 
-    On branch master
-    nothing to commit, working directory clean
+
+```python
+import operator
+class LabelReference:
+    '''
+    Represents a labeled column in a Dataset.
+    '''
+    def __init__(self, label: str):
+        self.label = label
+    def compare(self, value, operate):
+        return Comparison(self.label, value, operate)
+    def __lt__(self, value):
+        return self.compare(value, operator.lt)
+    def __gt__(self, value):
+        return self.compare(value, operator.gt)
+    def __ge__(self, value):
+        return self.compare(value, operator.ge)
+    def __le__(self, value):
+        return self.compare(value, operator.le)
+    def __eq__(self, value):
+        return self.compare(value, operator.eq)
+    def __add__(self, other):
+        return PairedLabelReference(self, other, operator.add)
+    def __sub__(self, other):
+        return PairedLabelReference(self, other, operator.sub)
+    def __mod__(self, other):
+        return PairedLabelReference(self, other, operator.mod)
 
 
-OK! My test.py file is safely tucked away now in my local repository. Just for the heck of it, I make a change in the test.py file and see what git says.
-
-<span id="helloWorldPy"/>
-
-
-```bash
-echo "print('Hello World')" > test.py
 ```
 
-    
+
+```python
+class PairedLabelReference(LabelReference):
+    '''
+    Represents two separate columns in some comparision relation to each other.
+    '''
+    def __init__(self, first: LabelReference, second: LabelReference, operate: 'func'):
+        self.first = first
+        self.second = second
+        self.operate = operate
+    def lookup(self, data: dict, row_number: int):
+        first_value = data[self.first.label][row_number]
+        if isinstance(self.second, LabelReference):
+            second_value = data[self.second.label][row_number]
+        else:
+            second_value = self.second
+        return self.operate(first_value, second_value)
+    def compare(self, value, operate: 'func'):
+        return GeneralComparison(self.lookup, value, operate)
 
 
-```bash
-git status
 ```
 
-    On branch master
-    Changes not staged for commit:
-      (use "git add <file>..." to update what will be committed)
-      (use "git checkout -- <file>..." to discard changes in working directory)
-    
-    	modified:   test.py
-    
-    no changes added to commit (use "git add" and/or "git commit -a")
 
+```python
+class Dataset:
+    '''
+    Core class representing a set of data.
 
-I can execute the diff command to see the differences between the original test.py file and the modified version of that file. The git diff command shows the changes since the last commit of the test.py file:
+    Filter rows with obj[expression].
+    '''
+    def __init__(self, data: dict):
+        self.data = data
+        self.length = num_rows(data)
+        self.labels = sorted(data.keys())
 
-<span id="gitDiff"/>
+    def __getattr__(self, label: str):
+        if label not in self.data:
+            raise AttributeError("'{}' object has no attribute '{}'".format(self.__class__.__name__, label))
+        return LabelReference(label)
 
+    def __getitem__(self, comparison: GeneralComparison):
+        filtered_data = dict((label, []) for label in self.labels)
+        def append_row(row_number):
+            for label in self.labels:
+                filtered_data[label].append(self.data[label][row_number])
+        for row_number in range(self.length):
+            if comparison.apply(self.data, row_number):
+                append_row(row_number)
+        return Dataset(filtered_data)
 
-```bash
-git diff
+    # presentation/rendering methods
+    def __str__(self):
+        return self.pprint_str()
+
+    def pprint_str(self):
+        # helpers
+        def width_of(label):
+            width = max(len(str(value)) for value in self.data[label])
+            width = max([width, len(str(label))])
+            return width
+        def format(value, label):
+            return '{value:>{width}}'.format(value=str(value), width=field_widths[label])
+
+        # precompute
+        field_widths = {label: width_of(label) for label in self.labels}
+        table_width = sum(width for width in field_widths.values()) + 3 * (len(self.labels)-1) + 4
+        HR = '-' * table_width
+
+        # render lines
+        labels_line = '| ' + ' | '.join(format(label, label) for label in self.labels) + ' |'
+        lines = [
+            HR,
+            labels_line,
+            HR,
+        ]
+        for row_number in range(self.length):
+            formatted_values = (format(self.data[label][row_number], label) for label in self.labels)
+            lines.append('| ' + ' | '.join(formatted_values) + ' |')
+        lines.append(HR)
+        return '\n'.join(lines)
 ```
 
-    diff --git a/test.py b/test.py
-    index d7f199c..df1dc68 100644
-    --- a/test.py
-    +++ b/test.py
-    @@ -1 +1 @@
-    -print('Hello Git')
-    +print('Hello World')
 
+```python
+ds = Dataset({
+    'A': [-1, 2, -3, 4, 5],
+    'B': [10, 11, 12, 13, 14],
+    'C': [3, 6, 9, 12, 15],
+})
 
-In order to commit the changes I’ve made to the test.py file, I need to first add the modified test.py file:
-
-
-```bash
-git add test.py
+ds2 = Dataset({
+    'A': [-137, 22, -3, 4, 5],
+    'B': [10, 11, 121, 13, 14],
+    'C': [3, 6, 91, 12, 15],
+})
 ```
 
-    
 
-Once I add the new test.py file, I commit the change:
-
-<span id="secondCommit"/>
-
-
-```bash
-git commit -m "my first change"
+```python
+# TODO: Make it produce a nicer html rendering, like Pandas does
+# Short version is I need to add a Dataset.to_html() method and 
+# convince jupyter to pass it through IPython.display.HTML automagically
+print(ds)
+print(ds[ds.A < 0])
+print(ds[ds.A > 0])
+print(ds[ds.B >= 12])
+print(ds[ds.B <= 12])
+print(ds[(ds.A > 0) & (ds.B >= 12)])
+print(ds[(ds.A >= 3) | (ds.B == 11)])
+print(ds[ds.A + ds.B < 10])
+print(ds[ds.B - ds.C >= 3])
+print(ds[ds.A + ds.B == 19])
+print(ds[ds.B - ds.C >= 3])
+print(ds[(ds.A > 0) & (ds.B >= 12)])
+print(ds[(ds.A >= 3) | (ds.B == 11)])
+print(ds[ds.C + 2 < ds.B])
+print(ds[ds.C % 2 == 0])
+print(ds[ds.C % 2 == 1])
 ```
 
-    [master 1598fc3] my first change
-     1 file changed, 1 insertion(+), 1 deletion(-)
+    ----------------
+    |  A |  B |  C |
+    ----------------
+    | -1 | 10 |  3 |
+    |  2 | 11 |  6 |
+    | -3 | 12 |  9 |
+    |  4 | 13 | 12 |
+    |  5 | 14 | 15 |
+    ----------------
+    ---------------
+    |  A |  B | C |
+    ---------------
+    | -1 | 10 | 3 |
+    | -3 | 12 | 9 |
+    ---------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 2 | 11 |  6 |
+    | 4 | 13 | 12 |
+    | 5 | 14 | 15 |
+    ---------------
+    ----------------
+    |  A |  B |  C |
+    ----------------
+    | -3 | 12 |  9 |
+    |  4 | 13 | 12 |
+    |  5 | 14 | 15 |
+    ----------------
+    ---------------
+    |  A |  B | C |
+    ---------------
+    | -1 | 10 | 3 |
+    |  2 | 11 | 6 |
+    | -3 | 12 | 9 |
+    ---------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 4 | 13 | 12 |
+    | 5 | 14 | 15 |
+    ---------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 2 | 11 |  6 |
+    | 4 | 13 | 12 |
+    | 5 | 14 | 15 |
+    ---------------
+    ---------------
+    |  A |  B | C |
+    ---------------
+    | -1 | 10 | 3 |
+    | -3 | 12 | 9 |
+    ---------------
+    ---------------
+    |  A |  B | C |
+    ---------------
+    | -1 | 10 | 3 |
+    |  2 | 11 | 6 |
+    | -3 | 12 | 9 |
+    ---------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 5 | 14 | 15 |
+    ---------------
+    ---------------
+    |  A |  B | C |
+    ---------------
+    | -1 | 10 | 3 |
+    |  2 | 11 | 6 |
+    | -3 | 12 | 9 |
+    ---------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 4 | 13 | 12 |
+    | 5 | 14 | 15 |
+    ---------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 2 | 11 |  6 |
+    | 4 | 13 | 12 |
+    | 5 | 14 | 15 |
+    ---------------
+    ----------------
+    |  A |  B |  C |
+    ----------------
+    | -1 | 10 |  3 |
+    |  2 | 11 |  6 |
+    | -3 | 12 |  9 |
+    |  4 | 13 | 12 |
+    |  5 | 14 | 15 |
+    ----------------
+    ---------------
+    | A |  B |  C |
+    ---------------
+    | 2 | 11 |  6 |
+    | 4 | 13 | 12 |
+    ---------------
+    ----------------
+    |  A |  B |  C |
+    ----------------
+    | -1 | 10 |  3 |
+    | -3 | 12 |  9 |
+    |  5 | 14 | 15 |
+    ----------------
 
 
-The git log command will let you see all the changes you’ve made to the test.py file.
 
-<span id="gitLog"/>
+```python
 
-
-```bash
-git log test.py
 ```
-
-    commit 1598fc3d8df9bf19913bc14960aa76bd4fe4cc2a
-    Author: Andrew Odewahn <odewahn@oreilly.com>
-    Date:   Sun Sep 25 21:44:23 2016 +0000
-    
-        my first change
-    
-    commit 7661e7ac7dd51d662a6839783e754e96a18fcd01
-    Author: Andrew Odewahn <odewahn@oreilly.com>
-    Date:   Sun Sep 25 21:32:15 2016 +0000
-    
-        simple print program
-
-
-<span id="theEnd"/>
