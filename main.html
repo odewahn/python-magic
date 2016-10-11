@@ -1,26 +1,67 @@
-<h1 id="amplifyingtheimpactofyourcode">Amplifying the Impact of Your Code</h1>
 
-<p><span id="introduction"/></p>
-
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Amplifying-the-Impact-of-Your-Code">Amplifying the Impact of Your Code<a class="anchor-link" href="#Amplifying-the-Impact-of-Your-Code">&#182;</a></h1><p><span id="introduction"/></p>
 <p>If you'd love to see more people using your code.... to magnify the impact of the code you already write... it makes sense to study successful open source libraries. They become successful and popular because, first and foremost, they let people do things they care about: build software and solve problems which are important to them. But just solving an important problem isn't enough. The library also has to be <em>usable</em>. It needs to be easy for developers to adopt, to learn, to integrate in their existing application. These days, we all have too much to learn already; in picking between two libraries, we're going to naturally tend towards the one that will make it easiest for us to hit the ground running... and that's only natural.</p>
-
 <p>Let's study a wildly successful example: the excellent Pandas data analysis library. This library does an amazing and remarkable amount of magic under the hood, and we're not going to study any of that here. Rather, we're going to focus on the magic on the surface: the interface this library exposes. It's core abstraction is something called a <strong>dataframe</strong>:</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><span id="dataframeExample"/></p>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">import pandas
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[112]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+import pandas
 df = pandas.DataFrame({
-        'A': [-137, 22, -3, 4, 5],
-        'B': [10, 11, 121, 13, 14],
-        'C': [3, 6, 91, 12, 15],
+        &#39;A&#39;: [-137, 22, -3, 4, 5],
+        &#39;B&#39;: [10, 11, 121, 13, 14],
+        &#39;C&#39;: [3, 6, 91, 12, 15],
     })
 </pre>
 
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>Here, we've created an object called <code>df</code>, which has three columns of data, labed <code>A</code>, <code>B</code>, and <code>C</code>. The dictionary passed in maps each column name to a list of column data. So in your mind, you rotate each horizontal list into a vertical column - got it? Then the data is organized like this:</p>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">df
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[113]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+df
 </pre>
 
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[113]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -65,15 +106,51 @@ df = pandas.DataFrame({
   </tbody>
 </table>
 </div>
+</div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>The far left is an index, and the columns of data are headed by their names. Now, Pandas lets you do some interesting things like select a certain subset of the data, according to a criteria. For example:</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><span id="selectSubset"/></p>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">positive_a = df[df.A &gt; 0]
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[114]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+positive_a = df[df.A &gt; 0]
 positive_a
 </pre>
 
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[114]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -106,16 +183,52 @@ positive_a
   </tbody>
 </table>
 </div>
+</div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>See what's happening: the expression <code>df.A &gt; 0</code> tells Pandas: "Give me a new DataFrame, consisting only of those rows of <code>df</code> whose value in the <code>A</code> column is positive."  We can do more sophisticated expressions too:</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><span id="createNewDataFrame"/></p>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting"># Bigger B column values
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[115]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+# Bigger B column values
 big_b = df[df.B &gt;= 14]
 big_b
 </pre>
 
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[115]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -142,12 +255,32 @@ big_b
   </tbody>
 </table>
 </div>
+</div>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting"># Or even express relationships between different columns:
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[116]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+# Or even express relationships between different columns:
 coupled = df[df.A + df.B &lt; 20]
 coupled
 </pre>
 
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[116]:</div>
+
+<div class="output_html rendered_html output_subarea output_execute_result">
 <div>
 <table border="1" class="dataframe">
   <thead>
@@ -180,27 +313,48 @@ coupled
   </tbody>
 </table>
 </div>
+</div>
 
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>In an expression like <code>df[df.A &gt; 0]</code>, the part in the brackets becomes a filter; you get a new <code>DataFrame</code> with only the matching rows.</p>
-
 <p>But when you think about it, <strong>that's a little weird</strong>. Boolean expressions are supposed to evaluate to either True or False. That means everything I typed above should become either <code>df[True]</code> or <code>df[False]</code> at runtime... encoding no information about the rows you actually want.</p>
-
 <p><strong>So what's going on? How in the world does this work?</strong></p>
-
-<h1 id="magicmethods">Magic Methods</h1>
-
-<p>Let's explore all this by building our own data-processing library, called <code>fakepandas</code>. We won't implement any of the real work Pandas does under the hood, so you'll always want to use Pandas for any actual data-processing work. Instead, we'll focus on the surface magic... how Pandas provides its interface. Our goal is to reinvent that with <code>fakepandas</code>, and learn a lot in the process, so we can this Python magic in our own libraries.</p>
-
+<h1 id="Magic-Methods">Magic Methods<a class="anchor-link" href="#Magic-Methods">&#182;</a></h1><p>Let's explore all this by building our own data-processing library, called <code>fakepandas</code>. We won't implement any of the real work Pandas does under the hood, so you'll always want to use Pandas for any actual data-processing work. Instead, we'll focus on the surface magic... how Pandas provides its interface. Our goal is to reinvent that with <code>fakepandas</code>, and learn a lot in the process, so we can this Python magic in our own libraries.</p>
 <p>And in fact, it turns out this magic relies on a a feature of Python called <strong>magic methods</strong>.</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p>TODO: Write more narration, etc. below. About 97% of the code I'll use in the oriole is below, I just need to write more exposition, etc.</p>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">def num_rows(d):
-    '''
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[117]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+def num_rows(d):
+    &#39;&#39;&#39;
     Get number of data rows.
 
     Raise ValueError if not all columns have the same number of rows.
-    '''
+    &#39;&#39;&#39;
     if len(d) == 0:
         return 0
     def gen_columns():
@@ -214,8 +368,15 @@ coupled
     return length
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting"># The operator module does not provide functions for the logical "and"
-# and "or" operators, only the bitwise "&amp;" and "|". So we make our own
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[118]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+# The operator module does not provide functions for the logical &#34;and&#34;
+# and &#34;or&#34; operators, only the bitwise &#34;&amp;&#34; and &#34;|&#34;. So we make our own
 # functions for the logicals.
 def logical_and(a, b):
     return a and b
@@ -224,11 +385,11 @@ def logical_or(a, b):
     return a or b
 
 class GeneralComparison:
-    '''
+    &#39;&#39;&#39;
     A generic representation of a comparison.
 
     Used when comparing two columns to each other (i.e., two LabelReferences).
-    '''
+    &#39;&#39;&#39;
     def __init__(self, lookup, value, operate):
         self.lookup = lookup
         self.value = value
@@ -236,8 +397,8 @@ class GeneralComparison:
     def apply(self, data, row_number):
         other_value = self.lookup(data, row_number)
         return self.operate(other_value, self.value)
-    # __and__ is actually bitwise and ("a &amp; b"), not logical and ("a
-    # and b").  Unfortunately, no current version of Python provides a
+    # __and__ is actually bitwise and (&#34;a &amp; b&#34;), not logical and (&#34;a
+    # and b&#34;).  Unfortunately, no current version of Python provides a
     # magic method for logical and.  Thus, we have little choice but
     # to fake it using bitwise and.
     def __and__(self, other):
@@ -247,37 +408,60 @@ class GeneralComparison:
         return Conjunction(self, other, logical_or)
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">class Comparison(GeneralComparison):
-    '''
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[119]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+class Comparison(GeneralComparison):
+    &#39;&#39;&#39;
     Simplified form of comparison.
 
     Used when comparing a column (LabelReference) to a constant value.
-    '''
+    &#39;&#39;&#39;
     def __init__(self, label: str, value, operate):
         def lookup(data, row_number):
             return data[label][row_number]
         super().__init__(lookup, value, operate)
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">class Conjunction:
-    '''
-    Represents a logical "and" or "or" relationship between two expressions.
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[120]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+class Conjunction:
+    &#39;&#39;&#39;
+    Represents a logical &#34;and&#34; or &#34;or&#34; relationship between two expressions.
 
     combine will generally be set to either logical_and or logical_or.
-    '''
-    def __init__(self, left: GeneralComparison, right: GeneralComparison, combine: 'func'):
+    &#39;&#39;&#39;
+    def __init__(self, left: GeneralComparison, right: GeneralComparison, combine: &#39;func&#39;):
         self.left = left
         self.right = right
         self.combine = combine
     def apply(self, data: dict, row_number: int):
         return self.combine(self.left.apply(data, row_number), self.right.apply(data, row_number))
+
+
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">import operator
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[121]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+import operator
 class LabelReference:
-    '''
+    &#39;&#39;&#39;
     Represents a labeled column in a Dataset.
-    '''
+    &#39;&#39;&#39;
     def __init__(self, label: str):
         self.label = label
     def compare(self, value, operate):
@@ -298,13 +482,22 @@ class LabelReference:
         return PairedLabelReference(self, other, operator.sub)
     def __mod__(self, other):
         return PairedLabelReference(self, other, operator.mod)
+
+
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">class PairedLabelReference(LabelReference):
-    '''
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[122]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+class PairedLabelReference(LabelReference):
+    &#39;&#39;&#39;
     Represents two separate columns in some comparision relation to each other.
-    '''
-    def __init__(self, first: LabelReference, second: LabelReference, operate: 'func'):
+    &#39;&#39;&#39;
+    def __init__(self, first: LabelReference, second: LabelReference, operate: &#39;func&#39;):
         self.first = first
         self.second = second
         self.operate = operate
@@ -315,16 +508,25 @@ class LabelReference:
         else:
             second_value = self.second
         return self.operate(first_value, second_value)
-    def compare(self, value, operate: 'func'):
+    def compare(self, value, operate: &#39;func&#39;):
         return GeneralComparison(self.lookup, value, operate)
+
+
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">class Dataset:
-    '''
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[123]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+class Dataset:
+    &#39;&#39;&#39;
     Core class representing a set of data.
 
     Filter rows with obj[expression].
-    '''
+    &#39;&#39;&#39;
     def __init__(self, data: dict):
         self.data = data
         self.length = num_rows(data)
@@ -332,7 +534,7 @@ class LabelReference:
 
     def __getattr__(self, label: str):
         if label not in self.data:
-            raise AttributeError("'{}' object has no attribute '{}'".format(self.__class__.__name__, label))
+            raise AttributeError(&#34;&#39;{}&#39; object has no attribute &#39;{}&#39;&#34;.format(self.__class__.__name__, label))
         return LabelReference(label)
 
     def __getitem__(self, comparison: GeneralComparison):
@@ -356,15 +558,15 @@ class LabelReference:
             width = max([width, len(str(label))])
             return width
         def format(value, label):
-            return '{value:&gt;{width}}'.format(value=str(value), width=field_widths[label])
+            return &#39;{value:&gt;{width}}&#39;.format(value=str(value), width=field_widths[label])
 
         # precompute
         field_widths = {label: width_of(label) for label in self.labels}
         table_width = sum(width for width in field_widths.values()) + 3 * (len(self.labels)-1) + 4
-        HR = '-' * table_width
+        HR = &#39;-&#39; * table_width
 
         # render lines
-        labels_line = '| ' + ' | '.join(format(label, label) for label in self.labels) + ' |'
+        labels_line = &#39;| &#39; + &#39; | &#39;.join(format(label, label) for label in self.labels) + &#39; |&#39;
         lines = [
             HR,
             labels_line,
@@ -372,25 +574,39 @@ class LabelReference:
         ]
         for row_number in range(self.length):
             formatted_values = (format(self.data[label][row_number], label) for label in self.labels)
-            lines.append('| ' + ' | '.join(formatted_values) + ' |')
+            lines.append(&#39;| &#39; + &#39; | &#39;.join(formatted_values) + &#39; |&#39;)
         lines.append(HR)
-        return '\n'.join(lines)
+        return &#39;\n&#39;.join(lines)
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting">ds = Dataset({
-    'A': [-1, 2, -3, 4, 5],
-    'B': [10, 11, 12, 13, 14],
-    'C': [3, 6, 9, 12, 15],
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[124]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+ds = Dataset({
+    &#39;A&#39;: [-1, 2, -3, 4, 5],
+    &#39;B&#39;: [10, 11, 12, 13, 14],
+    &#39;C&#39;: [3, 6, 9, 12, 15],
 })
 
 ds2 = Dataset({
-    'A': [-137, 22, -3, 4, 5],
-    'B': [10, 11, 121, 13, 14],
-    'C': [3, 6, 91, 12, 15],
+    &#39;A&#39;: [-137, 22, -3, 4, 5],
+    &#39;B&#39;: [10, 11, 121, 13, 14],
+    &#39;C&#39;: [3, 6, 91, 12, 15],
 })
 </pre>
 
-<pre data-code-language="python" data-executable="true" data-type="programlisting"># TODO: Make it produce a nicer html rendering, like Pandas does
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[125]:</div>
+<pre data-code-language="python" data-executable="true" data-type="programlisting">
+# TODO: Make it produce a nicer html rendering, like Pandas does
 # Short version is I need to add a Dataset.to_html() method and 
 # convince jupyter to pass it through IPython.display.HTML automagically
 print(ds)
@@ -411,6 +627,14 @@ print(ds[ds.C % 2 == 0])
 print(ds[ds.C % 2 == 1])
 </pre>
 
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
 <pre data-output="true">----------------
 |  A |  B |  C |
 ----------------
@@ -521,6 +745,20 @@ print(ds[ds.C % 2 == 1])
 |  5 | 14 | 15 |
 ----------------
 </pre>
+</div>
+</div>
 
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <pre data-code-language="python" data-executable="true" data-type="programlisting">
+
 </pre>
+
+</div>
+
+</div>
