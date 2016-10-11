@@ -1,26 +1,14 @@
 
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Amplifying-the-Impact-of-Your-Code">Amplifying the Impact of Your Code<a class="anchor-link" href="#Amplifying-the-Impact-of-Your-Code">&#182;</a></h1><p><span id="introduction"/></p>
 <p>If you'd love to see more people using your code.... to magnify the impact of the code you already write... it makes sense to study successful open source libraries. They become successful and popular because, first and foremost, they let people do things they care about: build software and solve problems which are important to them. But just solving an important problem isn't enough. The library also has to be <em>usable</em>. It needs to be easy for developers to adopt, to learn, to integrate in their existing application. These days, we all have too much to learn already; in picking between two libraries, we're going to naturally tend towards the one that will make it easiest for us to hit the ground running... and that's only natural.</p>
 <p>Let's study a wildly successful example: the excellent Pandas data analysis library. This library does an amazing and remarkable amount of magic under the hood, and we're not going to study any of that here. Rather, we're going to focus on the magic on the surface: the interface this library exposes. It's core abstraction is something called a <strong>dataframe</strong>:</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p><span id="dataframeExample"/></p>
 
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[112]:</div>
@@ -36,16 +24,10 @@ df = pandas.DataFrame({
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>Here, we've created an object called <code>df</code>, which has three columns of data, labed <code>A</code>, <code>B</code>, and <code>C</code>. The dictionary passed in maps each column name to a list of column data. So in your mind, you rotate each horizontal list into a vertical column - got it? Then the data is organized like this:</p>
 
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[113]:</div>
@@ -114,26 +96,14 @@ df
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>The far left is an index, and the columns of data are headed by their names. Now, Pandas lets you do some interesting things like select a certain subset of the data, according to a criteria. For example:</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p><span id="selectSubset"/></p>
 
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[114]:</div>
@@ -191,26 +161,14 @@ positive_a
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>See what's happening: the expression <code>df.A &gt; 0</code> tells Pandas: "Give me a new DataFrame, consisting only of those rows of <code>df</code> whose value in the <code>A</code> column is positive."  We can do more sophisticated expressions too:</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p><span id="createNewDataFrame"/></p>
 
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[115]:</div>
@@ -321,30 +279,18 @@ coupled
 </div>
 
 </div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>In an expression like <code>df[df.A &gt; 0]</code>, the part in the brackets becomes a filter; you get a new <code>DataFrame</code> with only the matching rows.</p>
 <p>But when you think about it, <strong>that's a little weird</strong>. Boolean expressions are supposed to evaluate to either True or False. That means everything I typed above should become either <code>df[True]</code> or <code>df[False]</code> at runtime... encoding no information about the rows you actually want.</p>
 <p><strong>So what's going on? How in the world does this work?</strong></p>
 <h1 id="Magic-Methods">Magic Methods<a class="anchor-link" href="#Magic-Methods">&#182;</a></h1><p>Let's explore all this by building our own data-processing library, called <code>fakepandas</code>. We won't implement any of the real work Pandas does under the hood, so you'll always want to use Pandas for any actual data-processing work. Instead, we'll focus on the surface magic... how Pandas provides its interface. Our goal is to reinvent that with <code>fakepandas</code>, and learn a lot in the process, so we can this Python magic in our own libraries.</p>
 <p>And in fact, it turns out this magic relies on a a feature of Python called <strong>magic methods</strong>.</p>
 
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <p>TODO: Write more narration, etc. below. About 97% of the code I'll use in the oriole is below, I just need to write more exposition, etc.</p>
 
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[117]:</div>
@@ -634,8 +580,7 @@ print(ds[ds.C % 2 == 1])
 
 
 <div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre data-output="true">----------------
+<pre class="output_subarea output_stream output_stdout output_text" data-output="true">----------------
 |  A |  B |  C |
 ----------------
 | -1 | 10 |  3 |
@@ -745,7 +690,6 @@ print(ds[ds.C % 2 == 1])
 |  5 | 14 | 15 |
 ----------------
 </pre>
-</div>
 </div>
 
 </div>
