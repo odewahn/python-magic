@@ -20,6 +20,10 @@ EXPOSE 8080
 USER root
 ADD run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
-USER jovyan 
+
+RUN apt-get update
+RUN apt-get install -y entr
+
+USER jovyan
 
 CMD ["/usr/local/bin/run.sh"]
